@@ -1,0 +1,38 @@
+{
+    "name": "anomaly/fizl-pages",
+    "description": "Simple file based web site builder.",
+    "keywords": ["cms", "markdown", "content", "files"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Osvaldo Brignoni",
+            "email": "obrignoni@anomaly.is"
+        }
+    ],
+    "require": {
+        "anomaly/lexicon": "dev-develop",
+        "laracasts/commander": "1.4.2",
+        "cebe/markdown": "~1.0.1",
+        "symfony/yaml": "~2.5.7"
+    },
+    "require-dev": {
+        "codeclimate/php-test-reporter": "dev-master",
+        "henrikbjorn/phpspec-code-coverage": "~0.2",
+        "phpspec/phpspec": "2.1.0-RC1"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-4": {
+            "Anomaly\\FizlPages\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "1.0.x-dev"
+        }
+    }
+}
