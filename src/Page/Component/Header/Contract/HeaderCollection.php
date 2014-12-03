@@ -19,7 +19,7 @@ interface HeaderCollection
      * @param $key
      * @return mixed
      */
-    public function getHeaderValue($key);
+    public function getValue($key, $default = null);
 
     /**
      * @param $event

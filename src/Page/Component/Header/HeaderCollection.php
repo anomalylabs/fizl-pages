@@ -17,14 +17,12 @@ class HeaderCollection extends Collection implements Headers
      * @param $key
      * @return null
      */
-    public function getHeaderValue($key)
+    public function getValue($key, $default = null)
     {
-        $value = null;
-
+        $value = $default;
         if ($header = $this->get($key)) {
             $value = $header->getValue();
         }
-
         return $value;
     }
 
@@ -34,7 +32,7 @@ class HeaderCollection extends Collection implements Headers
      */
     public function __get($key)
     {
-        return $this->getHeaderValue($key);
+        return $this->getValue($key);
     }
 
 }
