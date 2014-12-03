@@ -1,8 +1,6 @@
 <?php namespace Anomaly\FizlPages;
 
-use Anomaly\Lexicon\Contract\LexiconInterface;
 use Anomaly\Lexicon\Parser\ParserResolver;
-use Composer\Autoload\ClassLoader;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
@@ -33,6 +31,8 @@ class PagesServiceProvider extends ServiceProvider
 
     public function register()
     {
+        $this->package('anomaly/fizl-pages', null, __DIR__);
+
         $this->registerThirdPartyProviders();
         $this->registerBindings();
         $this->registerViewComposers();
@@ -83,7 +83,7 @@ class PagesServiceProvider extends ServiceProvider
         $this->app->resolving(
             'view',
             function (Factory $view) {
-                $view->composers(config('fizl.composers'));
+                $view->composers(config('fizl-pages::composers', []));
             }
         );
 
@@ -94,10 +94,10 @@ class PagesServiceProvider extends ServiceProvider
         $this->app->resolving(
             'view',
             function (Factory $view) {
-                foreach (config('fizl.namespaces', []) as $key => $value) {
+                foreach (config('fizl-pages::namespaces', []) as $key => $value) {
                     if (is_numeric($key)) {
                         $namespace = $value;
-                        $dir       = config('fizl.base_directory') . '/' . $value;
+                        $dir       = config('fizl-pages::base_path') . '/' . $value;
                     } else {
                         $namespace = $key;
                         $dir       = $value;
@@ -113,9 +113,16 @@ class PagesServiceProvider extends ServiceProvider
         $this->app->resolving(
             'Anomaly\Lexicon\Parser\ParserResolver',
             function (ParserResolver $parserResolver) {
-                $parserResolver->addParsers(config('fizl.extension_parsers'));
+                $parserResolver->addParsers(
+                    config(
+                        'fizl-pages::extension_parsers',
+                        [
+                            'md' => 'Anomaly\FizlPages\Parser\PageParser',
+                        ]
+                    )
+                );
             }
         );
     }
-
-} 
+    
+}
