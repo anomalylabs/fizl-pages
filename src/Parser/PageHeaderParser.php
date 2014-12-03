@@ -1,6 +1,8 @@
 <?php namespace Anomaly\FizlPages\Parser;
 
 use Anomaly\FizlPages\Cache\Contract\Cache;
+use Anomaly\FizlPages\Page\Component\Header\Command\PushHeadersIntoCollectionCommand;
+use Anomaly\FizlPages\Page\Component\Header\Contract\HeaderCollection;
 use Anomaly\FizlPages\Page\Component\Header\Header;
 use Anomaly\FizlPages\Support\CommanderTrait;
 use Anomaly\Lexicon\Parser\ParserInterface;
@@ -26,13 +28,19 @@ class PageHeaderParser implements ParserInterface
     protected $cache;
 
     /**
+     * @var HeaderCollection
+     */
+    protected $headers;
+
+    /**
      * @param Yaml  $yaml
      * @param Cache $cache
      */
-    public function __construct(Yaml $yaml, Cache $cache)
+    public function __construct(Yaml $yaml, Cache $cache, HeaderCollection $headers)
     {
-        $this->yaml  = $yaml;
-        $this->cache = $cache;
+        $this->yaml    = $yaml;
+        $this->cache   = $cache;
+        $this->headers = $headers;
     }
 
     /**
@@ -51,7 +59,9 @@ class PageHeaderParser implements ParserInterface
             $headers = $this->yaml->parse($parts[1]);
         }
 
-        $shortPath = str_replace('.md', '', str_replace(config('fizl.base_directory') . '/', '', $path));
+        $this->execute(new PushHeadersIntoCollectionCommand($headers, $this->headers));
+
+        $shortPath = str_replace('.md', '', str_replace(config('fizl-pages::base_path') . '/', '', $path));
 
         $pathParts = explode('/', $shortPath);
 

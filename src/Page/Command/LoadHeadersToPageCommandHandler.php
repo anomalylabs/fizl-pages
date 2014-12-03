@@ -1,11 +1,11 @@
 <?php namespace Anomaly\FizlPages\Page\Command;
 
 use Anomaly\FizlPages\Cache\Contract\Cache;
+use Anomaly\FizlPages\Page\Component\Header\Command\PushHeadersIntoCollectionCommand;
 use Anomaly\FizlPages\Page\Component\Header\Contract\HeaderFactory;
 use Anomaly\FizlPages\Page\Component\Header\Header;
 use Anomaly\FizlPages\Page\Event\HeadersLoadedToPage;
 use Anomaly\FizlPages\Support\CommanderTrait;
-use Laracasts\Commander\Events\DispatchableTrait;
 
 /**
  * Class LoadHeadersToPageCommandHandler
@@ -14,29 +14,24 @@ use Laracasts\Commander\Events\DispatchableTrait;
  */
 class LoadHeadersToPageCommandHandler
 {
-    use CommanderTrait, DispatchableTrait;
+    use CommanderTrait;
 
     /**
      * @var Cache
      */
     protected $cache;
-    /**
-     * @var HeaderFactory
-     */
-    private $headerFactory;
 
     /**
      * @param Cache $cache
      */
-    public function __construct(HeaderFactory $headerFactory, Cache $cache)
+    public function __construct(Cache $cache)
     {
-        $this->cache         = $cache;
-        $this->headerFactory = $headerFactory;
+        $this->cache = $cache;
     }
 
     /**
      * @param LoadHeadersToPageCommand $command
-     * @return \Anomaly\FizlPages\Page\PageInterface
+     * @return \Anomaly\FizlPages\Page\Contract\Page
      */
     public function handle(LoadHeadersToPageCommand $command)
     {
@@ -48,11 +43,7 @@ class LoadHeadersToPageCommandHandler
 
         $headers = $this->cache->get($cacheKey) ?: [];
 
-        foreach ($headers as $key => $value) {
-            $header = $this->headerFactory->create($key, $value);
-            $page->getHeaders()->put($key, $header);
-            $this->dispatchEventsFor($header);
-        }
+        $this->execute(new PushHeadersIntoCollectionCommand($headers, $page->getHeaders()));
 
         $page->raise(new HeadersLoadedToPage($page));
 
