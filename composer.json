@@ -14,7 +14,8 @@
         "anomaly/lexicon": "dev-develop",
         "laracasts/commander": "1.4.2",
         "cebe/markdown": "~1.0.1",
-        "symfony/yaml": "~2.5.7"
+        "symfony/yaml": "~2.5.7",
+        "symfony/finder": "2.6.*"
     },
     "require-dev": {
         "codeclimate/php-test-reporter": "dev-master",
