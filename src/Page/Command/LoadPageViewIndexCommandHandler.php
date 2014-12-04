@@ -25,10 +25,10 @@ class LoadPageViewIndexCommandHandler
     }
 
     /**
-     * @param LoadPageView404Command $command
+     * @param LoadPageViewIndexCommand $command
      * @return \Anomaly\FizlPages\Page\Contract\Page
      */
-    public function handle(LoadPageView404Command $command)
+    public function handle(LoadPageViewIndexCommand $command)
     {
         $page = $command->getPage();
 

@@ -1,9 +1,9 @@
 <?php namespace Anomaly\FizlPages\Page\Command;
 
 use Anomaly\FizlPages\Page\Event\PageViewLoaded;
+use Anomaly\FizlPages\Support\CommanderTrait;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Laracasts\Commander\CommanderTrait;
 
 /**
  * Class LoadPageViewCommandHandler
@@ -39,14 +39,13 @@ class LoadPageViewCommandHandler
         if (!$page->getView()) {
 
             try {
-
                 // Attempt to make default view
                 $page->setView($this->factory->make($page->getPath()));
 
             } catch (\InvalidArgumentException $e) {
 
                 // If not, try it as a index within the folder
-                if ($this->factory->exists($index)) {
+                if ($this->factory->exists($page->getIndexPath())) {
                     $this->execute(new LoadPageViewIndexCommand($page));
                 } else {
                     $this->execute(new LoadPageView404Command($page));

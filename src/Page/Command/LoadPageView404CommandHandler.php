@@ -1,5 +1,6 @@
 <?php namespace Anomaly\FizlPages\Page\Command;
 
+use Anomaly\FizlPages\Page\Contract\Page;
 use Anomaly\FizlPages\Page\Event\PageView404Loaded;
 use Illuminate\Contracts\View\Factory;
 
@@ -26,7 +27,7 @@ class LoadPageView404CommandHandler
 
     /**
      * @param LoadPageView404Command $command
-     * @return \Anomaly\FizlPages\Page\Contract\Page
+     * @return Page
      */
     public function handle(LoadPageView404Command $command)
     {
