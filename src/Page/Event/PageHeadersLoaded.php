@@ -1,15 +1,14 @@
-<?php namespace Anomaly\FizlPages\Page\Command;
+<?php namespace Anomaly\FizlPages\Page\Event;
 
-use Anomaly\FizlPages\Page\Contract\Page;
+use Anomaly\FizlPages\Page\Page;
 
 /**
- * Class CreatePageViewCommand
+ * Class PageHeadersLoaded
  *
- * @package Anomaly\FizlPages\Page\Command
+ * @package Anomaly\FizlPages\Page\Event
  */
-class CreatePageViewCommand
+class PageHeadersLoaded
 {
-
     /**
      * @var Page
      */
@@ -31,4 +30,4 @@ class CreatePageViewCommand
         return $this->page;
     }
 
-} 
+}

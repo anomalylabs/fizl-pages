@@ -12,7 +12,7 @@ class ConfigViewComposer
 
     public function compose(View $view)
     {
-        $view->with('data', config('fizl.data'));
+        $view->with('data', config('fizl-pages::data'));
     }
 
 } 

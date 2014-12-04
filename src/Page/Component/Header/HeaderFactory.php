@@ -12,19 +12,6 @@ class HeaderFactory implements \Anomaly\FizlPages\Page\Component\Header\Contract
 {
 
     /**
-     * @var HeaderCollection
-     */
-    protected $collection;
-
-    /**
-     * @param HeaderCollection $collection
-     */
-    public function __construct(HeaderCollection $collection)
-    {
-        $this->collection = $collection;
-    }
-
-    /**
      * @param $key
      * @param $value
      * @return Header
@@ -32,9 +19,7 @@ class HeaderFactory implements \Anomaly\FizlPages\Page\Component\Header\Contract
     public function create($key, $value)
     {
         $header = new Header($key, $value);
-
         $header->raise(new HeaderCreated($header));
-
         return $header;
     }
 

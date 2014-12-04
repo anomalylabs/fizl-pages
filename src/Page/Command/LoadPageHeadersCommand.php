@@ -1,13 +1,13 @@
-<?php namespace Anomaly\FizlPages\Page\Event;
+<?php namespace Anomaly\FizlPages\Page\Command;
 
 use Anomaly\FizlPages\Page\Contract\Page;
 
 /**
- * Class PageViewCreated
+ * Class LoadPageHeadersCommand
  *
- * @package Anomaly\FizlPages\Page\Event
+ * @package Anomaly\FizlPages\Page\Command
  */
-class PageViewCreated
+class LoadPageHeadersCommand 
 {
 
     /**

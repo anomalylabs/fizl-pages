@@ -46,17 +46,33 @@ interface Page
     /**
      * @return string
      */
-    public function render();
-
-    /**
-     * @return string
-     */
     public function getContent();
 
     /**
      * @return void
      */
     public function setContent($content);
+
+    /**
+     * @return string
+     */
+    public function getIndexPath();
+
+    /**
+     * @return string
+     */
+    public function getMissingPath();
+
+    /**
+     * @param  boolean $missing
+     * @return void
+     */
+    public function setMissing($missing);
+
+    /**
+     * @return boolean
+     */
+    public function isMissing();
 
     /**
      * @param $event

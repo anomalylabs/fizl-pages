@@ -3,11 +3,11 @@
 use Anomaly\FizlPages\Page\Contract\Page;
 
 /**
- * Class LoadHeadersToPageCommand
+ * Class RenderPageCommand
  *
  * @package Anomaly\FizlPages\Page\Command
  */
-class LoadHeadersToPageCommand 
+class RenderPageCommand 
 {
 
     /**

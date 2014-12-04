@@ -1,26 +1,30 @@
 <?php namespace Anomaly\FizlPages\Page\Event;
 
-use Anomaly\FizlPages\Page\PageInterface;
+use Anomaly\FizlPages\Page\Contract\Page;
 
 /**
- * Class ContentLoadedToPage
+ * Class PageViewIndexLoaded
  *
  * @package Anomaly\FizlPages\Page\Event
  */
-class ContentLoadedToPage 
+class PageViewIndexLoaded 
 {
+
     /**
-     * @var PageInterface
+     * @var Page
      */
     protected $page;
 
-    public function __construct(PageInterface $page)
+    /**
+     * @param Page $page
+     */
+    public function __construct(Page $page)
     {
         $this->page = $page;
     }
 
     /**
-     * @return PageInterface
+     * @return Page
      */
     public function getPage()
     {

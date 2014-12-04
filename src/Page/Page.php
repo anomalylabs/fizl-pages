@@ -34,16 +34,6 @@ class Page implements PageContract
     protected $path;
 
     /**
-     * @var ViewFactory
-     */
-    protected $viewFactory;
-
-    /**
-     * @var bool
-     */
-    protected $loaded = false;
-
-    /**
      * @var string
      */
     protected $content;
@@ -54,6 +44,21 @@ class Page implements PageContract
     protected $view;
 
     /**
+     * @var boolean
+     */
+    protected $missing = false;
+
+    /**
+     * Index
+     */
+    const INDEX = 'index';
+
+    /**
+     * Missing
+     */
+    const MISSING = 'errors.404';
+
+    /**
      * @param Path   $path
      * @param array  $data
      * @param string $namespace
@@ -61,13 +66,11 @@ class Page implements PageContract
     public function __construct(
         Path $path,
         array $data = [],
-        HeaderCollection $headers,
-        ViewFactory $viewFactory
+        HeaderCollection $headers
     ) {
         $this->path        = $path;
         $this->data        = $data;
         $this->headers     = $headers;
-        $this->viewFactory = $viewFactory;
     }
 
     /**
@@ -121,36 +124,6 @@ class Page implements PageContract
     /**
      * @return string
      */
-    public function render()
-    {
-        if ($view = $this->getView()) {
-            $this->setContent($view->render());
-        }
-
-        $this->raise(new PageRendered($this));
-
-        return $this->getContent();
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isLoaded()
-    {
-        return $this->loaded;
-    }
-
-    /**
-     * @param boolean $loaded
-     */
-    public function setLoaded($loaded)
-    {
-        $this->loaded = $loaded;
-    }
-
-    /**
-     * @return string
-     */
     public function getContent()
     {
         return $this->content;
@@ -171,6 +144,39 @@ class Page implements PageContract
     public function setView(View $view)
     {
         $this->view = $view;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIndexPath()
+    {
+        return $this->getPath() . '.' . static::INDEX;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMissingPath()
+    {
+        return $this->getNamespace() . '::' . static::MISSING;
+    }
+
+    /**
+     * @param  boolean $missing
+     * @return void
+     */
+    public function setMissing($missing)
+    {
+        $this->missing = $missing;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isMissing()
+    {
+        return $this->missing;
     }
 
 }

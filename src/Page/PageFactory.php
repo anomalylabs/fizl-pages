@@ -14,27 +14,16 @@ use Laracasts\Commander\Events\EventGenerator;
 class PageFactory implements \Anomaly\FizlPages\Page\Contract\PageFactory
 {
     /**
-     * @var Page
-     */
-    protected $page;
-
-    /**
      * @var HeaderCollection
      */
     protected $headers;
 
     /**
-     * @var ViewFactory
-     */
-    protected $view;
-
-    /**
      * @param HeaderCollection $headers
      */
-    public function __construct(HeaderCollection $headers, ViewFactory $view)
+    public function __construct(HeaderCollection $headers)
     {
         $this->headers = $headers;
-        $this->view    = $view;
     }
 
     /**
@@ -42,7 +31,7 @@ class PageFactory implements \Anomaly\FizlPages\Page\Contract\PageFactory
      */
     public function create($path, array $data = [])
     {
-        $page = new Page(new Path($path), $data, $this->headers, $this->view);
+        $page = new Page(new Path($path), $data, $this->headers);
         $page->raise(new PageCreated($page));
         return $page;
     }

@@ -1,8 +1,10 @@
 <?php namespace Anomaly\FizlPages;
 
+use Anomaly\FizlPages\Page\Command\RenderPageCommand;
 use Anomaly\FizlPages\Page\Component\Path\Path;
 use Anomaly\FizlPages\Page\Component\Uri\Uri;
 use Anomaly\FizlPages\Page\Contract\PageFactory;
+use Anomaly\FizlPages\Support\CommanderTrait;
 use Laracasts\Commander\Events\DispatchableTrait;
 
 /**
@@ -12,6 +14,8 @@ use Laracasts\Commander\Events\DispatchableTrait;
  */
 class Pages implements \Anomaly\FizlPages\Contract\Pages
 {
+    use CommanderTrait;
+
     use DispatchableTrait;
 
     /**
@@ -37,11 +41,11 @@ class Pages implements \Anomaly\FizlPages\Contract\Pages
     {
         $page = $this->getPage($uri, $data, $namespace);
 
-        $content = $page->render();
+        $this->execute(new RenderPageCommand($page));
 
         $this->dispatchEventsFor($page);
 
-        return $content;
+        return $page->getContent();
     }
 
     /**

@@ -14,7 +14,7 @@ class Header implements \Anomaly\FizlPages\Page\Component\Header\Contract\Header
     /**
      * Cache prefix
      */
-    const CACHE_PREFIX = 'page.header.';
+    const CACHE_PREFIX = 'page.headers.';
 
     /**
      * @var string

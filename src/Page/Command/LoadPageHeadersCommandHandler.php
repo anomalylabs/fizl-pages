@@ -4,15 +4,15 @@ use Anomaly\FizlPages\Cache\Contract\Cache;
 use Anomaly\FizlPages\Page\Component\Header\Command\PushHeadersIntoCollectionCommand;
 use Anomaly\FizlPages\Page\Component\Header\Contract\HeaderFactory;
 use Anomaly\FizlPages\Page\Component\Header\Header;
-use Anomaly\FizlPages\Page\Event\HeadersLoadedToPage;
+use Anomaly\FizlPages\Page\Event\PageHeadersLoaded;
 use Anomaly\FizlPages\Support\CommanderTrait;
 
 /**
- * Class LoadHeadersToPageCommandHandler
+ * Class LoadPageHeadersCommandHandler
  *
  * @package Anomaly\FizlPages\Page\Command
  */
-class LoadHeadersToPageCommandHandler
+class LoadPageHeadersCommandHandler
 {
     use CommanderTrait;
 
@@ -30,14 +30,16 @@ class LoadHeadersToPageCommandHandler
     }
 
     /**
-     * @param LoadHeadersToPageCommand $command
+     * @param LoadPageHeadersCommand $command
      * @return \Anomaly\FizlPages\Page\Contract\Page
      */
-    public function handle(LoadHeadersToPageCommand $command)
+    public function handle(LoadPageHeadersCommand $command)
     {
         $page = $command->getPage();
 
-        $page->render();
+        if ($view = $page->getView() and !$page->isMissing()) {
+            $view->render();
+        }
 
         $cacheKey = Header::CACHE_PREFIX . $page->getPath();
 
@@ -45,7 +47,7 @@ class LoadHeadersToPageCommandHandler
 
         $this->execute(new PushHeadersIntoCollectionCommand($headers, $page->getHeaders()));
 
-        $page->raise(new HeadersLoadedToPage($page));
+        $page->raise(new PageHeadersLoaded($page));
 
         return $page;
     }

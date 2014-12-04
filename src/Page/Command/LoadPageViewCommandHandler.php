@@ -1,16 +1,18 @@
 <?php namespace Anomaly\FizlPages\Page\Command;
 
-use Anomaly\FizlPages\Page\Event\PageViewCreated;
+use Anomaly\FizlPages\Page\Event\PageViewLoaded;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Laracasts\Commander\CommanderTrait;
 
 /**
- * Class CreatePageViewCommandHandler
+ * Class LoadPageViewCommandHandler
  *
  * @package Anomaly\FizlPages\Page\Command
  */
-class CreatePageViewCommandHandler
+class LoadPageViewCommandHandler
 {
+    use CommanderTrait;
 
     /**
      * @var Factory
@@ -26,10 +28,10 @@ class CreatePageViewCommandHandler
     }
 
     /**
-     * @param CreatePageViewCommand $command
+     * @param LoadPageViewCommand $command
      * @return  View
      */
-    public function handle(CreatePageViewCommand $command)
+    public function handle(LoadPageViewCommand $command)
     {
         $page = $command->getPage();
 
@@ -37,25 +39,24 @@ class CreatePageViewCommandHandler
         if (!$page->getView()) {
 
             try {
+
                 // Attempt to make default view
                 $page->setView($this->factory->make($page->getPath()));
 
             } catch (\InvalidArgumentException $e) {
 
                 // If not, try it as a index within the folder
-                $index = $page->getPath() . '.index';
-
                 if ($this->factory->exists($index)) {
-                    $page->setView($this->factory->make($index));
+                    $this->execute(new LoadPageViewIndexCommand($page));
                 } else {
-                    $page->setView($this->factory->make($page->getNamespace().'::errors.404'));
+                    $this->execute(new LoadPageView404Command($page));
                 }
             }
 
-            $page->raise(new PageViewCreated($page));
+            $page->raise(new PageViewLoaded($page));
         }
 
-        return $page->getView();
+        return $page;
     }
 
 } 

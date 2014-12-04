@@ -1,14 +1,15 @@
-<?php namespace Anomaly\FizlPages\Page\Event;
+<?php namespace Anomaly\FizlPages\Page\Command;
 
 use Anomaly\FizlPages\Page\Contract\Page;
 
 /**
- * Class HeadersLoadedToPage
+ * Class LoadPageViewIndexCommand
  *
- * @package Anomaly\FizlPages\Page\Event
+ * @package Anomaly\FizlPages\Page\Command
  */
-class HeadersLoadedToPage 
+class LoadPageViewIndexCommand 
 {
+
     /**
      * @var Page
      */
