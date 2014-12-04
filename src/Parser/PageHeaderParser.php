@@ -73,4 +73,13 @@ class PageHeaderParser implements ParserInterface
         return $string;
     }
 
+    /**
+     * @param      $key
+     * @param null $default
+     */
+    public function getValue($key, $default = null)
+    {
+        return $this->headers->getValue($key, $default);
+    }
+
 }

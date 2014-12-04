@@ -47,9 +47,9 @@ class PageParser
         $string = $this->headers->parse($string, $path);
         $string = $this->markdown->parse($string, $path);
 
-        //if ($this->headers->lexicon) {
+        if ($this->headers->getValue('lexicon', false)) {
             $string = $this->lexicon->parse($string, $path);
-        //}
+        }
 
         return $string;
     }
