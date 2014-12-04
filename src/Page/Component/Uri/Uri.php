@@ -35,7 +35,7 @@ class Uri implements \Anomaly\FizlPages\Page\Component\Uri\Contract\Uri
      */
     public function toPath()
     {
-        return str_replace('/', '.', $this->namespace . '::pages.' . $this->uri);
+        return str_replace('/', '.', $this->namespace . '::pages.' . $this->toString());
     }
 
     /**
@@ -51,6 +51,10 @@ class Uri implements \Anomaly\FizlPages\Page\Component\Uri\Contract\Uri
      */
     public function toString()
     {
+        if ($this->uri == '' or $this->uri == '/') {
+            $this->uri = config('fizl-pages::home');
+        }
+
         return $this->uri;
     }
 
