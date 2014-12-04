@@ -62,14 +62,6 @@ class Path implements \Anomaly\FizlPages\Page\Component\Path\Contract\Path
     /**
      * @return string
      */
-    public function toIndex()
-    {
-        return $this->toUri() . '.index';
-    }
-
-    /**
-     * @return string
-     */
     public function __toString()
     {
         return $this->toString();
