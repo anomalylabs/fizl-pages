@@ -18,18 +18,13 @@ class PageFinder
      * @var Finder
      */
     protected $finder;
-    /**
-     * @var PageCollectionFactory
-     */
-    private $collectionFactory;
 
     /**
      * @param Finder $finder
      */
-    public function __construct(Finder $finder, PageCollectionFactory $collectionFactory)
+    public function __construct(Finder $finder)
     {
         $this->finder = $finder;
-        $this->collectionFactory = $collectionFactory;
     }
 
     public function find($uri, $depth = 1, $namespace = Path::DEFAULT_NAMESPACE)
@@ -79,7 +74,7 @@ class PageFinder
             $uris[] = $uri;
         }
 
-        return $this->collectionFactory->create($uris);
+        return $uris;
     }
 
 } 

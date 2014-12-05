@@ -17,7 +17,7 @@ class PageController extends Controller
      */
     public function page(Pages $pages, $uri)
     {
-        return $pages->render($uri);
+        return $pages->render($uri, [], 'en');
     }
 
 } 

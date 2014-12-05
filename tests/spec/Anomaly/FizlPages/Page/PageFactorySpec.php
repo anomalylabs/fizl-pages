@@ -21,6 +21,6 @@ class PageFactorySpec extends ObjectBehavior
 
     function it_creates_a_page()
     {
-        $this->create('en::home', ['foo' => 'bar'])->shouldImplement('\Anomaly\FizlPages\Page\Contract\Page');
+        $this->create('home', 'en', ['foo' => 'bar'])->shouldImplement('\Anomaly\FizlPages\Page\Contract\Page');
     }
 }

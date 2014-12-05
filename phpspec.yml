@@ -3,3 +3,5 @@ suites:
     spec_path: tests
     namespace: Anomaly\FizlPages
     psr4_prefix: Anomaly\FizlPages
+
+formatter.name: pretty

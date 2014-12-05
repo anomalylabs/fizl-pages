@@ -9,10 +9,11 @@ interface PageFactory
 {
 
     /**
-     * @param       $path
+     * @param       $uri
+     * @param null  $namespace
      * @param array $data
-     * @return Page
+     * @return mixed
      */
-    public function create($path, array $data = []);
+    public function create($uri, $namespace = null, array $data = []);
 
 } 

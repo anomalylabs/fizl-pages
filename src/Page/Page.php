@@ -5,7 +5,6 @@ use Anomaly\FizlPages\Page\Component\Path\Contract\Path;
 use Anomaly\FizlPages\Page\Contract\Page as PageContract;
 use Anomaly\FizlPages\Page\Event\PageRendered;
 use Anomaly\FizlPages\Support\CommanderTrait;
-use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Contracts\View\View;
 use Laracasts\Commander\Events\EventGenerator;
 
@@ -29,9 +28,9 @@ class Page implements PageContract
     protected $headers;
 
     /**
-     * @var Path
+     * @var string
      */
-    protected $path;
+    protected $uri;
 
     /**
      * @var string
@@ -49,28 +48,42 @@ class Page implements PageContract
     protected $missing = false;
 
     /**
-     * Index
+     * @var string|null
      */
-    const INDEX = 'index';
+    protected $namespace;
 
     /**
-     * Missing
-     */
-    const MISSING = 'errors.404';
-
-    /**
-     * @param Path   $path
-     * @param array  $data
-     * @param string $namespace
+     * @param                  $uri
+     * @param HeaderCollection $headers
+     * @param null             $namespace
+     * @param array            $data
      */
     public function __construct(
-        Path $path,
-        array $data = [],
-        HeaderCollection $headers
+        $uri,
+        HeaderCollection $headers,
+        $namespace = null,
+        array $data = []
     ) {
-        $this->path        = $path;
-        $this->data        = $data;
-        $this->headers     = $headers;
+        $this->uri       = $uri;
+        $this->headers   = $headers;
+        $this->namespace = $namespace;
+        $this->data      = $data;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUri()
+    {
+        return $this->uri;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
     }
 
     /**
@@ -82,11 +95,15 @@ class Page implements PageContract
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
-    public function getNamespace()
+    public function getNamespacePrefix()
     {
-        return $this->path->toNamespace();
+
+        if ($namespace = str_replace(['/', '.'], '_', $this->getNamespace())) {
+            $namespace .= '.';
+        }
+        return $namespace;
     }
 
     /**
@@ -100,21 +117,14 @@ class Page implements PageContract
     /**
      * @return string
      */
-    public function getUri()
-    {
-        return $this->path->toUri();
-    }
-
-    /**
-     * @return string
-     */
     public function getPath()
     {
-        return $this->path->toString();
+        $uri = str_replace('/', '.', $this->getUri());
+        return "fizl::{$this->getNamespacePrefix()}pages.{$uri}";
     }
 
     /**
-     * @return \Illuminate\Contracts\View\View
+     * @return \Illuminate\Contracts\View\View|null
      */
     public function getView()
     {
@@ -151,7 +161,7 @@ class Page implements PageContract
      */
     public function getIndexPath()
     {
-        return $this->getPath() . '.' . static::INDEX;
+        return $this->getPath() . '.index';
     }
 
     /**
@@ -159,7 +169,7 @@ class Page implements PageContract
      */
     public function getMissingPath()
     {
-        return $this->getNamespace() . '::' . static::MISSING;
+        return "fizl::{$this->getNamespacePrefix()}errors.404";
     }
 
     /**
@@ -177,6 +187,25 @@ class Page implements PageContract
     public function isMissing()
     {
         return $this->missing;
+    }
+
+    /**
+     * @param      $key
+     * @param null $default
+     * @return mixed
+     */
+    public function get($key, $default = null)
+    {
+        return $this->getHeaders()->getValue($key, $default);
+    }
+
+    /**
+     * @param $key
+     * @return mixed
+     */
+    public function __get($key)
+    {
+        return $this->get($key);
     }
 
 }
