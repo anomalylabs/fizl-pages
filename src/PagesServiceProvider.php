@@ -1,10 +1,12 @@
 <?php namespace Anomaly\FizlPages;
 
+use Anomaly\FizlPages\PageFinder\PageFinderFactory;
 use Anomaly\Lexicon\Parser\ParserResolver;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Factory;
+use Symfony\Component\Finder\Finder;
 
 
 /**
@@ -61,6 +63,10 @@ class PagesServiceProvider extends ServiceProvider
             'Anomaly\FizlPages\Page\PageFactory'
         );
         $this->app->bind(
+            'Anomaly\FizlPages\Page\Contract\PageCollection',
+            'Anomaly\FizlPages\Page\PageCollection'
+        );
+        $this->app->bind(
             'Anomaly\FizlPages\Page\Component\Header\HeaderInterface',
             'Anomaly\FizlPages\Page\Component\Header\Header'
         );
@@ -75,6 +81,13 @@ class PagesServiceProvider extends ServiceProvider
         $this->app->bind(
             'Anomaly\FizlPages\Cache\Contract\Cache',
             'Anomaly\FizlPages\Cache\Cache'
+        );
+
+        $this->app->bindShared(
+            'Anomaly\FizlPages\PageFinder\Contract\PageFinderFactory',
+            function () {
+                return new PageFinderFactory(config('fizl-pages::base_path'));
+            }
         );
     }
 
@@ -94,16 +107,7 @@ class PagesServiceProvider extends ServiceProvider
         $this->app->resolving(
             'view',
             function (Factory $view) {
-                foreach (config('fizl-pages::namespaces', []) as $key => $value) {
-                    if (is_numeric($key)) {
-                        $namespace = $value;
-                        $dir       = config('fizl-pages::base_path') . '/' . $value;
-                    } else {
-                        $namespace = $key;
-                        $dir       = $value;
-                    }
-                    $view->addNamespace($namespace, $dir);
-                }
+                $view->addNamespace('fizl', config('fizl-pages::base_path'));
             }
         );
     }
@@ -124,5 +128,5 @@ class PagesServiceProvider extends ServiceProvider
             }
         );
     }
-    
+
 }

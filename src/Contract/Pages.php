@@ -7,19 +7,35 @@ interface Pages
 {
 
     /**
-     * @param        $uri
-     * @param array  $data
-     * @param string $namespace
+     * @param       $uri
+     * @param null  $namespace
+     * @param array $data
      * @return Page
      */
-    public function getPage($uri, array $data = [], $namespace = Path::DEFAULT_NAMESPACE);
+    public function getPage($uri, $namespace = null, array $data = []);
+
+    /**
+     * @param       $uri
+     * @param null  $namespace
+     * @param array $data
+     * @return string
+     */
+    public function render($uri, $namespace = null, array $data = []);
 
     /**
      * @param        $uri
-     * @param array  $data
-     * @param string $namespace
-     * @return string
+     * @param null   $namespace
+     * @param int    $depth
+     * @param string $orderBy
+     * @param bool   $descending
+     * @return mixed
      */
-    public function render($uri, array $data = [], $namespace = Path::DEFAULT_NAMESPACE);
+    public function getPages(
+        $uri,
+        $namespace = null,
+        $depth = 1,
+        $orderBy = 'uri',
+        $descending = false
+    );
 
 }

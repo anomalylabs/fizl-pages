@@ -4,4 +4,10 @@ suites:
     namespace: Anomaly\FizlPages
     psr4_prefix: Anomaly\FizlPages
 
+extensions:
+    - PhpSpec\Laravel\Extension\LaravelExtension
+
+laravel_extension:
+    framework_path: laravel/laravel
+
 formatter.name: pretty

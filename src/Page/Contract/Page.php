@@ -2,6 +2,7 @@
 
 use Anomaly\FizlPages\Page\Component\Header\HeaderCollection;
 use Illuminate\Contracts\View\View;
+use Symfony\Component\Finder\SplFileInfo;
 
 interface Page
 {
@@ -79,5 +80,17 @@ interface Page
      * @return mixed
      */
     public function raise($event);
+
+    /**
+     * @return array
+     */
+    public function toArray();
+
+    /**
+     * @param string $key
+     * @param null   $default
+     * @return mixed
+     */
+    public function get($key, $default = null);
 
 }

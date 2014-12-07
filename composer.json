@@ -12,15 +12,17 @@
     ],
     "require": {
         "anomaly/lexicon": "dev-develop",
-        "laracasts/commander": "1.4.2",
         "cebe/markdown": "~1.0.1",
+        "laracasts/commander": "1.4.2",
         "symfony/yaml": "~2.5.7",
-        "symfony/finder": "2.6.*"
+        "symfony/finder": "2.6.*",
+        "nesbot/carbon":"1.13.0"
     },
     "require-dev": {
+        "benconstable/phpspec-laravel": "dev-laravel-5",
         "codeclimate/php-test-reporter": "dev-master",
         "henrikbjorn/phpspec-code-coverage": "~0.2",
-        "phpspec/phpspec": "2.1.0-RC1"
+        "laravel/laravel": "dev-develop"
     },
     "config": {
         "bin-dir": "bin"

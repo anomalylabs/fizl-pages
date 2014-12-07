@@ -4,10 +4,11 @@ namespace spec\Anomaly\FizlPages\Page;
 
 use Anomaly\FizlPages\Page\Component\Header\Contract\HeaderCollection;
 use Illuminate\Contracts\View\Factory;
+use PhpSpec\Laravel\LaravelObjectBehavior;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
-class PageFactorySpec extends ObjectBehavior
+class PageFactorySpec extends LaravelObjectBehavior
 {
     function let(HeaderCollection $headers, Factory $view)
     {

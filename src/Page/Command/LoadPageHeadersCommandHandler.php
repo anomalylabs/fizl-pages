@@ -2,8 +2,6 @@
 
 use Anomaly\FizlPages\Cache\Contract\Cache;
 use Anomaly\FizlPages\Page\Component\Header\Command\PushHeadersIntoCollectionCommand;
-use Anomaly\FizlPages\Page\Component\Header\Contract\HeaderFactory;
-use Anomaly\FizlPages\Page\Component\Header\Header;
 use Anomaly\FizlPages\Page\Event\PageHeadersLoaded;
 use Anomaly\FizlPages\Support\CommanderTrait;
 
@@ -41,7 +39,7 @@ class LoadPageHeadersCommandHandler
             $view->render();
         }
 
-        $cacheKey = Header::CACHE_PREFIX . $page->getPath();
+        $cacheKey = $page->getPath() . '.headers';
 
         $headers = $this->cache->get($cacheKey) ?: [];
 

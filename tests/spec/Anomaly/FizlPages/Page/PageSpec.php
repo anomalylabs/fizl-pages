@@ -4,14 +4,17 @@ use Anomaly\FizlPages\Page\Component\Header\Header;
 use Anomaly\FizlPages\Page\Component\Header\HeaderCollection;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Contracts\View\View;
+use PhpSpec\Laravel\LaravelObjectBehavior;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
-class PageSpec extends ObjectBehavior
+class PageSpec extends LaravelObjectBehavior
 {
 
     public function let(HeaderCollection $headers)
     {
+        $this->laravel->app->register('Laracasts\Commander\CommanderServiceProvider');
+
         $this->beConstructedWith(
             $uri = 'foo/bar',
             $headers

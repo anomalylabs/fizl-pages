@@ -1,9 +1,9 @@
 <?php namespace Anomaly\FizlPages\Page;
 
+use Anomaly\FizlPages\Page\Component\Header\Command\DecorateHeaderCommand;
 use Anomaly\FizlPages\Page\Component\Header\Contract\HeaderCollection;
 use Anomaly\FizlPages\Page\Component\Path\Contract\Path;
 use Anomaly\FizlPages\Page\Contract\Page as PageContract;
-use Anomaly\FizlPages\Page\Event\PageRendered;
 use Anomaly\FizlPages\Support\CommanderTrait;
 use Illuminate\Contracts\View\View;
 use Laracasts\Commander\Events\EventGenerator;
@@ -196,7 +196,8 @@ class Page implements PageContract
      */
     public function get($key, $default = null)
     {
-        return $this->getHeaders()->getValue($key, $default);
+        $value = $this->getHeaders()->getValue($key, $default);
+        return $this->execute(new DecorateHeaderCommand($key, $value));
     }
 
     /**
@@ -206,6 +207,19 @@ class Page implements PageContract
     public function __get($key)
     {
         return $this->get($key);
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'uri' => $this->getUri(),
+            'path' => $this->getPath(),
+            'namespace' => $this->getNamespace(),
+            'headers' => $this->getHeaders()->toArray(),
+        ];
     }
 
 }

@@ -27,4 +27,9 @@ interface HeaderCollection
      */
     public function raise($event);
 
+    /**
+     * @return array
+     */
+    public function toArray();
+
 } 
