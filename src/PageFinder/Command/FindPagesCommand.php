@@ -42,24 +42,15 @@ class FindPagesCommand
      * @param      $uri
      * @param null $namespace
      * @param int  $depth
-     * @param null $orderBy
-     * @param int  $descending
-     * @param null $limit
      */
     public function __construct(
         $uri,
         $namespace = null,
-        $depth = 1,
-        $orderBy = null,
-        $descending = 0,
-        $limit = null
+        $depth = 1
     ) {
-        $this->uri        = $uri;
-        $this->namespace  = $namespace;
-        $this->orderBy    = $orderBy;
-        $this->limit      = $limit;
-        $this->depth      = $depth;
-        $this->descending = $descending;
+        $this->uri       = $uri;
+        $this->namespace = $namespace;
+        $this->depth     = $depth;
     }
 
     /**

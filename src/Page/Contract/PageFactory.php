@@ -14,6 +14,6 @@ interface PageFactory
      * @param array $data
      * @return mixed
      */
-    public function create($uri, $namespace = null, array $data = []);
+    public function create($uri, $namespace = null);
 
 } 

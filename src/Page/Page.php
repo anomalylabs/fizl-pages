@@ -6,6 +6,7 @@ use Anomaly\FizlPages\Page\Component\Path\Contract\Path;
 use Anomaly\FizlPages\Page\Contract\Page as PageContract;
 use Anomaly\FizlPages\Support\CommanderTrait;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Str;
 use Laracasts\Commander\Events\EventGenerator;
 
 /**
@@ -16,11 +17,6 @@ use Laracasts\Commander\Events\EventGenerator;
 class Page implements PageContract
 {
     use EventGenerator, CommanderTrait;
-
-    /**
-     * @var array
-     */
-    protected $data;
 
     /**
      * @var HeaderCollection
@@ -60,14 +56,10 @@ class Page implements PageContract
      */
     public function __construct(
         $uri,
-        HeaderCollection $headers,
-        $namespace = null,
-        array $data = []
+        $namespace = null
     ) {
         $this->uri       = $uri;
-        $this->headers   = $headers;
         $this->namespace = $namespace;
-        $this->data      = $data;
     }
 
     /**
@@ -87,23 +79,22 @@ class Page implements PageContract
     }
 
     /**
-     * @return array
-     */
-    public function getData()
-    {
-        return $this->data;
-    }
-
-    /**
      * @return string|null
      */
     public function getNamespacePrefix()
     {
-
         if ($namespace = str_replace(['/', '.'], '_', $this->getNamespace())) {
             $namespace .= '.';
         }
         return $namespace;
+    }
+
+    /**
+     * @param HeaderCollection $headers
+     */
+    public function setHeaders(HeaderCollection $headers)
+    {
+        $this->headers = $headers;
     }
 
     /**
@@ -190,14 +181,23 @@ class Page implements PageContract
     }
 
     /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        $segments = explode('/', $this->getUri());
+        $last = $segments[count($segments)-1];
+        return $this->get('title', str_replace(['-', '-'], ' ', Str::title($last)));
+    }
+
+    /**
      * @param      $key
      * @param null $default
      * @return mixed
      */
     public function get($key, $default = null)
     {
-        $value = $this->getHeaders()->getValue($key, $default);
-        return $this->execute(new DecorateHeaderCommand($key, $value));
+        return $this->getHeaders()->getValue($key, $default);
     }
 
     /**
@@ -206,6 +206,12 @@ class Page implements PageContract
      */
     public function __get($key)
     {
+        $method = 'get'. Str::studly($key);
+
+        if (method_exists($this, $method)) {
+            return $method();
+        }
+
         return $this->get($key);
     }
 
@@ -215,6 +221,7 @@ class Page implements PageContract
     public function toArray()
     {
         return [
+            'title' => $this->getTitle(),
             'uri' => $this->getUri(),
             'path' => $this->getPath(),
             'namespace' => $this->getNamespace(),
@@ -222,4 +229,13 @@ class Page implements PageContract
         ];
     }
 
+    public function toJson()
+    {
+        return json_encode($this->toArray());
+    }
+
+    public function __toString()
+    {
+        return $this->toJson();
+    }
 }

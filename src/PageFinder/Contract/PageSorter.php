@@ -11,9 +11,10 @@ interface PageSorter
 {
 
     /**
-     * @param Page $page
-     * @return string
+     * @param Page   $page
+     * @param string $key
+     * @return mixed
      */
-    public function sortBy(Page $page);
+    public function sortBy(Page $page, $key);
 
 } 

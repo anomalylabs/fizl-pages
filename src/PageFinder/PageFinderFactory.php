@@ -26,11 +26,11 @@ class PageFinderFactory implements \Anomaly\FizlPages\PageFinder\Contract\PageFi
 
     /**
      * @param      $uri
-     * @param int  $depth
      * @param null $namespace
-     * @return mixed
+     * @param int  $depth
+     * @return Finder
      */
-    public function create($uri, $depth = 1, $namespace = null)
+    public function create($uri, $namespace = null, $depth = 1)
     {
         $path = ($uri === '/') ? '' : $uri;
 

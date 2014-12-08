@@ -1,22 +1,21 @@
 <?php namespace Anomaly\FizlPages\Page\Contract;
 
-use Anomaly\FizlPages\Page\Component\Header\HeaderCollection;
+use Anomaly\FizlPages\Page\Component\Header\Contract\HeaderCollection;
 use Illuminate\Contracts\View\View;
 use Symfony\Component\Finder\SplFileInfo;
 
 interface Page
 {
-
     /**
-     * @return array
-     */
-    public function getData();
-
-    /**
-     * @return mixed
+     * @return string|null
      */
     public function getNamespace();
 
+    /**
+     * @param HeaderCollection $headers
+     * @return void
+     */
+    public function setHeaders(HeaderCollection $headers);
 
     /**
      * @return HeaderCollection
@@ -74,6 +73,11 @@ interface Page
      * @return boolean
      */
     public function isMissing();
+
+    /**
+     * @return string
+     */
+    public function getTitle();
 
     /**
      * @param $event

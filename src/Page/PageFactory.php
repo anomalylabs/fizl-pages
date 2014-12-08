@@ -3,7 +3,6 @@
 use Anomaly\FizlPages\Page\Component\Header\Contract\HeaderCollection;
 use Anomaly\FizlPages\Page\Component\Path\Path;
 use Anomaly\FizlPages\Page\Component\Uri\Uri;
-use Anomaly\FizlPages\Page\Event\PageCreated;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Laracasts\Commander\Events\EventGenerator;
 
@@ -33,11 +32,9 @@ class PageFactory implements \Anomaly\FizlPages\Page\Contract\PageFactory
      * @param array $data
      * @return Contract\Page|Page
      */
-    public function create($uri, $namespace = null, array $data = [])
+    public function create($uri, $namespace = null)
     {
-        $page = new Page($uri, $this->headers, $namespace, $data);
-        $page->raise(new PageCreated($page));
-        return $page;
+        return new Page($uri, $namespace);
     }
 
 

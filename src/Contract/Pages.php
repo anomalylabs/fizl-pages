@@ -2,40 +2,46 @@
 
 use Anomaly\FizlPages\Page\Component\Path\Path;
 use Anomaly\FizlPages\Page\Contract\Page;
+use Anomaly\FizlPages\Page\Contract\PageCollection;
 
 interface Pages
 {
+    /**
+     * @param string $sortBy
+     * @param bool   $descending
+     * @return $this
+     */
+    public function sortBy($sortBy, $descending = true);
 
     /**
-     * @param       $uri
-     * @param null  $namespace
-     * @param array $data
+     * @param int $depth
+     */
+    public function depth($depth = 1);
+
+    /**
+     * @param string $namespace
      * @return Page
      */
-    public function getPage($uri, $namespace = null, array $data = []);
+    public function in($namespace = null);
 
     /**
-     * @param       $uri
-     * @param null  $namespace
-     * @param array $data
+     * @param string $uri
+     * @return Page
+     */
+    public function find($uri = '/');
+
+    /**
+     * @param string $uri
+     * @return PageCollection
+     */
+    public function get($uri = '/');
+
+    /**
+     * @param string $uri
+     * @param null   $namespace
+     * @param array  $data
      * @return string
      */
-    public function render($uri, $namespace = null, array $data = []);
-
-    /**
-     * @param        $uri
-     * @param null   $namespace
-     * @param int    $depth
-     * @param string $orderBy
-     * @param bool   $descending
-     * @return mixed
-     */
-    public function getPages(
-        $uri,
-        $namespace = null,
-        $depth = 1,
-        $orderBy = 'uri',
-        $descending = false
-    );
+    public function render($uri = '/');
 
 }

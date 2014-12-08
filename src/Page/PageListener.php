@@ -32,21 +32,9 @@ class PageListener extends EventListener
         $this->execute(new LoadPageViewCommand($page));
         $this->execute(new LoadPageHeadersCommand($page));
 
-        $this->dispatchEventsFor($page);
-    }
-
-    /**
-     * @param PageHeadersLoaded $event
-     */
-    public function whenPageHeadersLoaded(PageHeadersLoaded $event)
-    {
-        $page = $event->getPage();
-
         if (!$page->getHeaders()->getValue('routable', true)) {
             $this->execute(new LoadPageView404Command($page));
         }
-
-        $this->dispatchEventsFor($page);
     }
 
 } 

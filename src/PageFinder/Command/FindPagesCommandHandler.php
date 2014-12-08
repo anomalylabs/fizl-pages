@@ -1,9 +1,11 @@
 <?php namespace Anomaly\FizlPages\PageFinder\Command;
 
+use Anomaly\FizlPages\Page\Command\CreatePageCommand;
 use Anomaly\FizlPages\Page\Contract\PageCollection;
 use Anomaly\FizlPages\Page\Contract\PageFactory;
 use Anomaly\FizlPages\PageFinder\Contract\PageFinderFactory;
 use Anomaly\FizlPages\PageFinder\Event\PagesFound;
+use Anomaly\FizlPages\Support\CommanderTrait;
 use Laracasts\Commander\Events\DispatchableTrait;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -14,12 +16,12 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 class FindPagesCommandHandler
 {
-    use DispatchableTrait;
+    use CommanderTrait, DispatchableTrait;
 
     /**
      * @var PageFinderFactory
      */
-    protected $pageFinderFactory;
+    protected $pageFinder;
 
     /**
      * @var PageFactory
@@ -32,26 +34,26 @@ class FindPagesCommandHandler
     protected $pages;
 
     /**
-     * @param PageFinderFactory $pageFinderFactory
+     * @param PageFinderFactory $pageFinder
      * @param PageFactory       $pageFactory
      * @param PageCollection    $pages
      */
     public function __construct(
-        PageFinderFactory $pageFinderFactory,
+        PageFinderFactory $pageFinder,
         PageFactory $pageFactory,
         PageCollection $pages
     ) {
-        $this->pageFinderFactory = $pageFinderFactory;
-        $this->pageFactory       = $pageFactory;
+        $this->pageFinder = $pageFinder;
         $this->pages             = $pages;
     }
 
     public function handle(FindPagesCommand $command)
     {
         $uri       = $command->getUri();
+        $depth     = $command->getDepth();
         $namespace = $command->getNamespace();
 
-        $finder = $this->pageFinderFactory->create($uri, 1, $namespace);
+        $finder = $this->pageFinder->create($uri, $namespace, $depth);
 
         /** @var SplFileInfo $file */
         foreach ($finder as $file) {
@@ -60,17 +62,15 @@ class FindPagesCommandHandler
 
             if ($file->getFilename() == 'index.md') {
                 $uri = $file->getRelativePath();
-
-                dd($uri);
             }
 
             $uri = str_replace('.md', '', $uri);
 
-            $page = $this->pageFactory->create($uri, $namespace);
-
-            $this->dispatchEventsFor($page);
+            $page = $this->execute(new CreatePageCommand($uri, $namespace));
 
             $this->pages->put($uri, $page);
+
+            $this->dispatchEventsFor($page);
         }
 
         $this->pages->raise(new PagesFound($this->pages));

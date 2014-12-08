@@ -7,7 +7,7 @@ use Anomaly\FizlPages\Page\PageCollection;
  *
  * @package Anomaly\FizlPages\PageFinder\Command
  */
-class SortPagesCommand 
+class SortPagesCommand
 {
 
     /**
@@ -23,13 +23,29 @@ class SortPagesCommand
     /**
      * @var bool
      */
-    protected $descending;
+    protected $descending = true;
 
-    public function __construct(PageCollection $pageCollection, $sortBy = 'uri', $descending = false)
-    {
+    /**
+     * @var array
+     */
+    protected $pageSorters = [];
+
+    /**
+     * @param PageCollection $pageCollection
+     * @param null           $sortBy
+     * @param bool           $descending
+     * @param array          $pageSorters
+     */
+    public function __construct(
+        PageCollection $pageCollection,
+        $sortBy = null,
+        $descending = true,
+        array $pageSorters = []
+    ) {
         $this->pageCollection = $pageCollection;
-        $this->sortBy = $sortBy;
-        $this->descending = $descending;
+        $this->sortBy         = $sortBy;
+        $this->descending     = $descending;
+        $this->pageSorters = $pageSorters;
     }
 
     /**
@@ -54,6 +70,14 @@ class SortPagesCommand
     public function getSortBy()
     {
         return $this->sortBy;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPageSorters()
+    {
+        return $this->pageSorters;
     }
 
 } 

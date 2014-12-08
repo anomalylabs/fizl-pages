@@ -65,7 +65,20 @@ class PageHeaderParser implements ParserInterface
 
         $date = Carbon::createFromTimestamp($file->getMTime());
 
+        $dateFormat = config('fizl-pages::date_format', 'm/d/Y g:ia');
+
         $headers['date_modified'] = $date->toDateTimeString();
+
+        if (isset($headers['date'])) {
+            try {
+                $headers['date'] = Carbon::createFromFormat($dateFormat, $headers['date'])->toDateTimeString();
+            } catch (\InvalidArgumentException $e) {
+                $headers['date'] = $headers['date_modified'];
+                //dd($e->getMessage());
+            }
+        } else {
+            $headers['date'] = $headers['date_modified'];
+        }
 
         $this->execute(new PushHeadersIntoCollectionCommand($headers, $this->headers));
 

@@ -8,6 +8,6 @@
 interface PageFinderFactory
 {
 
-    public function create($uri, $depth = 1, $namespace = null);
+    public function create($uri, $namespace = null, $depth = 1);
 
 } 
