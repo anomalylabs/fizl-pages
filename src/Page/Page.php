@@ -1,6 +1,7 @@
 <?php namespace Anomaly\FizlPages\Page;
 
 use Anomaly\FizlPages\Page\Component\Header\Command\DecorateHeaderCommand;
+use Anomaly\FizlPages\Page\Component\Header\Contract\Header;
 use Anomaly\FizlPages\Page\Component\Header\Contract\HeaderCollection;
 use Anomaly\FizlPages\Page\Component\Path\Contract\Path;
 use Anomaly\FizlPages\Page\Contract\Page as PageContract;
@@ -100,7 +101,7 @@ class Page implements PageContract
     /**
      * @return HeaderCollection
      */
-    public function getHeaders()
+    protected function getHeaders()
     {
         return $this->headers;
     }
@@ -191,13 +192,29 @@ class Page implements PageContract
     }
 
     /**
+     * @param Header $header
+     */
+    public function addHeader(Header $header)
+    {
+        if ($headers = $this->getHeaders()) {
+            $headers->put($header->getKey(), $header);
+        }
+    }
+
+    /**
      * @param      $key
      * @param null $default
      * @return mixed
      */
     public function get($key, $default = null)
     {
-        return $this->getHeaders()->getValue($key, $default);
+        $value = $default;
+
+        if ($headers = $this->getHeaders()) {
+            $value = $headers->getValue($key, $default);
+        }
+
+        return $value;
     }
 
     /**

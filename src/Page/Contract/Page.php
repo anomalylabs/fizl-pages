@@ -18,11 +18,6 @@ interface Page
     public function setHeaders(HeaderCollection $headers);
 
     /**
-     * @return HeaderCollection
-     */
-    public function getHeaders();
-
-    /**
      * @return View
      */
     public function getView();

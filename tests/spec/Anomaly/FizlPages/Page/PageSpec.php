@@ -16,7 +16,7 @@ class PageSpec extends LaravelObjectBehavior
         $this->laravel->app->register('Laracasts\Commander\CommanderServiceProvider');
 
         $this->beConstructedWith(
-            $uri = 'foo/bar',
+            'foo/bar',
             $headers
         );
     }
@@ -31,45 +31,24 @@ class PageSpec extends LaravelObjectBehavior
         $this->getUri()->shouldBe('foo/bar');
     }
 
-    function it_gets_namespace(HeaderCollection $headers)
+    function it_sets_namespace()
     {
         $this->beConstructedWith(
-            $uri = 'foo/bar',
-            $headers,
+            'foo/bar',
             'namespace'
         );
 
         $this->getNamespace()->shouldBe('namespace');
     }
 
-    function it_gets_namespace_prefix(HeaderCollection $headers)
+    function it_gets_namespace_prefix()
     {
         $this->beConstructedWith(
-            $uri = 'foo/bar',
-            $headers,
+            'foo/bar',
             'namespace'
         );
 
         $this->getNamespacePrefix()->shouldBe('namespace.');
-    }
-
-    function it_gets_data(HeaderCollection $headers)
-    {
-        $this->beConstructedWith(
-            $uri = 'foo/bar',
-            $headers,
-            'namespace',
-            ['key' => 'value']
-        );
-
-        $this->getData()->shouldBe(['key' => 'value']);
-    }
-
-    function it_gets_headers()
-    {
-        $this
-            ->getHeaders()
-            ->shouldImplement('Anomaly\FizlPages\Page\Component\Header\Contract\HeaderCollection');
     }
 
     function it_gets_path()
@@ -77,11 +56,10 @@ class PageSpec extends LaravelObjectBehavior
         $this->getPath()->shouldBe('fizl::pages.foo.bar');
     }
 
-    function it_gets_namespaced_path(HeaderCollection $headers)
+    function it_gets_namespaced_path()
     {
         $this->beConstructedWith(
-            $uri = 'foo/bar',
-            $headers,
+            'foo/bar',
             'namespace'
         );
 
@@ -93,11 +71,10 @@ class PageSpec extends LaravelObjectBehavior
         $this->getIndexPath()->shouldBe('fizl::pages.foo.bar.index');
     }
 
-    function it_gets_namespaced_index_path(HeaderCollection $headers)
+    function it_gets_namespaced_index_path()
     {
         $this->beConstructedWith(
-            $uri = 'foo/bar',
-            $headers,
+            'foo/bar',
             'namespace'
         );
 
@@ -112,8 +89,7 @@ class PageSpec extends LaravelObjectBehavior
     function it_gets_namespaced_missing_path(HeaderCollection $headers)
     {
         $this->beConstructedWith(
-            $uri = 'foo/bar',
-            $headers,
+            'foo/bar',
             'namespace'
         );
 
@@ -138,13 +114,12 @@ class PageSpec extends LaravelObjectBehavior
         $this->isMissing()->shouldBe(true);
     }
 
-    function it_gets_a_header_value(HeaderCollection $headers)
+    function it_gets_a_header_value()
     {
         $headers->getValue('headerKey', null)->willReturn('headerValue');
 
         $this->beConstructedWith(
-            $uri = 'foo/bar',
-            $headers
+            'foo/bar'
         );
 
         $this->get('headerKey')->shouldBe('headerValue');

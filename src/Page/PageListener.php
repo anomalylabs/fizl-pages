@@ -32,7 +32,7 @@ class PageListener extends EventListener
         $this->execute(new LoadPageViewCommand($page));
         $this->execute(new LoadPageHeadersCommand($page));
 
-        if (!$page->getHeaders()->getValue('routable', true)) {
+        if (!$page->get('routable', true)) {
             $this->execute(new LoadPageView404Command($page));
         }
     }
