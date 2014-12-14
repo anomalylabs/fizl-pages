@@ -132,7 +132,7 @@ class Pages implements \Anomaly\FizlPages\Contract\Pages
      */
     public function exists($uri = '/')
     {
-        return $this->exists(new CheckPageExistsCommand($uri, $this->namespace));
+        return $this->execute(new CheckPageExistsCommand($uri, $this->namespace));
     }
 
 }
